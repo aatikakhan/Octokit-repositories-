@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'data_provider.dart';
+import 'home_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<DataProvider>(
+          create: (_) => DataProvider(),
+        ),
+      ],
+      child: Builder(
+        builder: (context) {
+          return const MyApp();
+        },
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -11,29 +28,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Machine',
+      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: const HomePage(),
     );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Trending'),
-        ),
-        body: Container());
   }
 }
