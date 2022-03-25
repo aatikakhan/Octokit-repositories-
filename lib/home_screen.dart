@@ -83,7 +83,50 @@ class _HomePageState extends State<HomePage> {
           // on refresh update the data
           return Provider.of<DataProvider>(context, listen: false).getData();
         },
-        child: entries == null ? const Text('error') : listwidget(entries),
+        child: entries == null
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                        height: MediaQuery.of(context).size.height * .5,
+                        child: Image.asset(
+                            'assets/icons/nointernet_connection.png')),
+                    const Text(
+                      'Something went wrong..',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'An alien is probably blocking your signal.',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * .05,
+                        width: MediaQuery.of(context).size.width,
+                        child: TextButton(
+                            onPressed: () {
+                              Provider.of<DataProvider>(context, listen: false)
+                                  .getData();
+                              entries = Provider.of<DataProvider>(context,
+                                      listen: false)
+                                  .data;
+                            },
+                            style: TextButton.styleFrom(
+                              side: const BorderSide(color: Colors.green),
+                            ),
+                            child: const Text(
+                              'RETRY',
+                              style: TextStyle(color: Colors.green),
+                            ),),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : listwidget(entries),
       ),
     );
   }
