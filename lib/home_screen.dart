@@ -84,10 +84,7 @@ class _HomePageState extends State<HomePage> {
           return Provider.of<DataProvider>(context, listen: false).getData();
         },
         child: entries == null
-            ? AnimatedOpacity(
-                opacity: opacity,
-                duration: const Duration(seconds: 5),
-                child: error_widget(context, entries))
+            ? error_widget(context, entries)
             : AnimatedOpacity(
                 opacity: opacity,
                 duration: const Duration(seconds: 5),
