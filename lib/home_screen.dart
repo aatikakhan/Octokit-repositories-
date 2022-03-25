@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gofinance/data_repository.dart';
+import 'package:gofinance/widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'data_provider.dart';
@@ -11,13 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<int> entries = [1, 1, 2, 2, 2, 2, 2, 2];
-  String hexString = '#25282B';
-  bool isExpanded = false;
   double opacity = 1.0;
 
   @override
   void initState() {
+    Provider.of<DataProvider>(context, listen: false).getData();
     super.initState();
     changeOpacity();
   }
@@ -33,43 +33,58 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<DataModel>? entries =
+        Provider.of<DataProvider>(context, listen: false).data;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
           'Trending',
-          style: TextStyle(
-            color: Color(0xff25282b),
-          ),
+          style:
+              TextStyle(color: Color(0xff25282b), fontWeight: FontWeight.bold),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: PopupMenuButton<Widget>(
+              icon: Image.asset('assets/icons/more-black-24.png'),
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<Widget>>[
+                PopupMenuItem<Widget>(
+                  child: GestureDetector(
+                    child: const Text('Sort by stars'),
+                    onTap: () {
+                      // sort based on stars on repo
+                      entries!.sort((a, b) =>
+                          a.stargazersCount!.compareTo(b.stargazersCount!));
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                PopupMenuItem<Widget>(
+                  child: GestureDetector(
+                    child: const Text('Sort by name'),
+                    onTap: () {
+                      // sort based on name
+
+                      entries!.sort((a, b) => a.name!.compareTo(b.name!));
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      body: Consumer<DataProvider>(
-          builder: (context, DataProvider dataProvider, child) {
-        return AnimatedOpacity(
-            opacity: opacity,
-            duration: const Duration(seconds: 2),
-            child: ListView.separated(
-              padding: const EdgeInsets.all(8),
-              itemCount: entries.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ExpansionTile(
-                  onExpansionChanged: (status){
-                    setState(() {
-                      dataProvider.getData();
-                      
-                    });
-                  },
-                  leading: Image.asset('assets/icons/fork-black-16.png'),
-                  title: Text('${entries[index]}'),
-                  children: const [
-                    Center(child: Text('we are exploring')),
-                  ],
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-            ));
-      }),
+      body: RefreshIndicator(
+        color: Colors.black,
+        onRefresh: () {
+          setState(() {});
+          // on refresh update the data
+          return Provider.of<DataProvider>(context, listen: false).getData();
+        },
+        child: entries == null ? const Text('error') : listwidget(entries),
+      ),
     );
   }
 }
