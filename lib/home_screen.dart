@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   changeOpacity() {
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         opacity = opacity == 0.0 ? 1.0 : 0.0;
         changeOpacity();
@@ -84,8 +84,14 @@ class _HomePageState extends State<HomePage> {
           return Provider.of<DataProvider>(context, listen: false).getData();
         },
         child: entries == null
-            ? error_widget(context,entries)
-            : listwidget(entries),
+            ? AnimatedOpacity(
+                opacity: opacity,
+                duration: const Duration(seconds: 5),
+                child: error_widget(context, entries))
+            : AnimatedOpacity(
+                opacity: opacity,
+                duration: const Duration(seconds: 5),
+                child: listwidget(entries)),
       ),
     );
   }
