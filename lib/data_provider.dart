@@ -16,10 +16,6 @@ class DataProvider with ChangeNotifier {
     // please add username and password for doing basic auth based request
     Response res = await http.get(
       Uri.parse('https://api.github.com/orgs/octokit/repos'),
-      headers: <String, String>{
-        'authorization':
-            'Basic ' + base64Encode(utf8.encode('username:password'))
-      },
     );
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
