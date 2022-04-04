@@ -13,24 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double opacity = 1.0;
-
-  @override
-  void initState() {
-    Provider.of<DataProvider>(context, listen: false).getData();
-    super.initState();
-    changeOpacity();
-  }
-
-  changeOpacity() {
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        opacity = opacity == 0.0 ? 1.0 : 0.0;
-        changeOpacity();
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     List<DataModel>? entries =
@@ -85,10 +67,7 @@ class _HomePageState extends State<HomePage> {
         },
         child: entries == null
             ? error_widget(context, entries)
-            : AnimatedOpacity(
-                opacity: opacity,
-                duration: const Duration(seconds: 5),
-                child: listwidget(entries)),
+            : listwidget(entries),
       ),
     );
   }
