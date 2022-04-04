@@ -38,8 +38,6 @@ flutter:
   assets:
     - assets/icons/fork-black-16.png
     - assets/icons/more-black-24.png
-    - assets/icons/nointernet_connection.png
-    - assets/icons/refresh-black-24.png
     - assets/icons/star-yellow-16.png
     
   fonts:
