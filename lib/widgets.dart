@@ -60,8 +60,7 @@ Widget error_widget (context,entries){
                   children: [
                     SizedBox(
                         height: MediaQuery.of(context).size.height * .5,
-                        child: Image.asset(
-                            'assets/icons/nointernet_connection.png')),
+                        child: const Icon(Icons.signal_wifi_connected_no_internet_4)),
                     const Text(
                       'Something went wrong..',
                       style: TextStyle(fontWeight: FontWeight.bold),
